@@ -1,9 +1,9 @@
 #!/usr/bin/python3
-"""Defines the Amenity class."""
+"""Amenity class."""
 from models.base_model import BaseModel
 
 
 class Amenity(BaseModel):
-    """Amenity"""
+    """Initialize Amenity instance."""
 
     name = ""

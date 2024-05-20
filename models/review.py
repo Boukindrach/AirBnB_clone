@@ -1,10 +1,10 @@
 #!/usr/bin/python3
-"""Defines the Review class."""
+"""Review class."""
 from models.base_model import BaseModel
 
 
 class Review(BaseModel):
-    """Review"""
+    """Initialize Review instance."""
 
     place_id = ""
     user_id = ""
