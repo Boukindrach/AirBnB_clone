@@ -1,7 +1,6 @@
 #!/usr/bin/python3
-
+"""BaseModel class."""
 import models
-import uuid
 from uuid import uuid4
 from datetime import datetime
 
@@ -11,14 +10,14 @@ class BaseModel:
 
     def __init__(self, *args, **kwargs):
         """Initialize BaseModel instance."""
-        self.id = str(uuid.uuid4())
+        time_format = "%Y-%m-%dT%H:%M:%S.%f"
+        self.id = str(uuid4())
         self.created_at = datetime.today()
         self.updated_at = datetime.today()
-        tform = "%Y-%m-%dT%H:%M:%S.%f"
-        if kwargs:
+        if len(kwargs) != 0:
             for k, v in kwargs.items():
                 if k == "created_at" or k == "updated_at":
-                    self.__dict__[k] = datetime.strptime(v, tform)
+                    self.__dict__[k] = datetime.strptime(v, time_format)
                 else:
                     self.__dict__[k] = v
         else:
@@ -26,20 +25,20 @@ class BaseModel:
 
     def save(self):
         """Save the instance to storage."""
-        self.update_at = datetime.now()
-        Storage.save()
+        self.updated_at = datetime.today()
+        models.storage.save()
 
     def to_dict(self):
         """Convert instance to dictionary."""
         dictionary = self.__dict__.copy()
-        dictionary['created_at'] = self.created_at.isoformat()
-        dictionary['updated_at'] = self.updated_at.isoformat()
-        dictionary['__class__'] = self.__class__.__name__
+        dictionary["created_at"] = self.created_at.isoformat()
+        dictionary["updated_at"] = self.updated_at.isoformat()
+        dictionary["__class__"] = self.__class__.__name__
         return dictionary
 
     def __str__(self):
         """Return string representation of the instance."""
-        return "[] ({}) {}".format(
+        return "[{}] ({}) {}".format(
                 self.__class__.__name__,
                 self.id,
                 self.__dict__)

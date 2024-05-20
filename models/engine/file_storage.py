@@ -17,7 +17,7 @@ class FileStorage:
 
     def all(self):
         """Retrieve all stored objects."""
-        return self.__objects
+        return FileStorage.__objects
 
     def new(self, obj):
         """Add a new object to the storage"""
@@ -26,17 +26,18 @@ class FileStorage:
 
     def save(self):
         """Serialize objects to a JSON file."""
-        odict = FileStorage.__objects
-        obj_dict = {obj: odict[obj].to_dict() for obj in odict.keys()}
+        obj_dict = {key: obj.to_dict() for key, obj in self.__objects.items()}
         with open(FileStorage.__file_path, "w") as f:
             json.dump(obj_dict, f)
 
     def reload(self):
         """Deserialize the JSON file to objects, if it exists."""
         try:
-            with open(self.__file_path, 'r') as f:
+            with open(FileStorage.__file_path) as f:
                 obj_dict = json.load(f)
-                for key, value in obj_dict.items():
-                    self.__objects[key] = BaseModel(**value)
+                for value in obj_dict.values():
+                    cls_n = value["__class__"]
+                    del value["__class__"]
+                    self.new(eval(cls_n)(**value))
         except FileNotFoundError:
             return
