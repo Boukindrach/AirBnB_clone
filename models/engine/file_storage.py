@@ -14,9 +14,11 @@ class FileStorage:
     """Represent an abstracted storage engine."""
     __file_path = "file.json"
     __objects = {}
+
     def all(self):
         """Retrieve all stored objects."""
         return FileStorage.__objects
+
     def new(self, obj):
         """Add a new object to the storage"""
         key = f"{obj.__class__.__name__}.{obj.id}"
